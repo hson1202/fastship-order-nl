@@ -1,0 +1,85 @@
+.chef-login-popup {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: #00000090;
+  display: grid;
+  place-items: center;
+}
+
+.chef-login-popup-container {
+  width: 400px;
+  color: #808080;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 30px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.chef-login-popup-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chef-login-popup-title h2 {
+  color: #ff6347;
+  margin: 0;
+}
+
+.chef-login-popup-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chef-login-popup-inputs input {
+  outline: none;
+  border: 1px solid #c9c9c9;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.chef-login-popup-container button {
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  color: white;
+  background-color: #ff6347;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chef-login-popup-container button:hover {
+  background-color: #e5533d;
+}
+
+.chef-login-popup-condition {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  margin-top: -15px;
+}
+
+.chef-login-popup-condition input {
+  margin-top: 5px;
+}
+
+.chef-login-popup-container p {
+  margin: 0;
+}
+
+.chef-login-popup-container p span {
+  color: #ff6347;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.chef-login-popup-container p span:hover {
+  text-decoration: underline;
+}

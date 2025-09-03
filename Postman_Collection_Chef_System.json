@@ -1,0 +1,235 @@
+{
+	"info": {
+		"name": "FASTSHIP ORDER NL - Chef System",
+		"description": "Collection để test tài khoản chef và chức năng order nguyên liệu FASTSHIP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:4000",
+			"type": "string"
+		},
+		{
+			"key": "chef_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Chef Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.json().success) {",
+							"    pm.collectionVariables.set('chef_token', pm.response.json().token);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"chef@fastship.com\",\n    \"password\": \"chef123456\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"login"
+					]
+				},
+				"description": "Đăng nhập tài khoản chef"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Register New Chef",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Chef Mới\",\n    \"email\": \"newchef@fastship.com\",\n    \"password\": \"newchef123\",\n    \"role\": \"chef\",\n    \"restaurant\": \"FASTSHIP Kitchen Branch\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/user/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				},
+				"description": "Đăng ký tài khoản chef mới"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Get All Ingredients",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{chef_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/ingredient/list",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"ingredient",
+						"list"
+					]
+				},
+				"description": "Lấy danh sách tất cả nguyên liệu để chef chọn order"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Create Ingredient Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "token",
+						"value": "{{chef_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [\n        {\n            \"ingredientId\": \"INGREDIENT_ID_HERE\",\n            \"quantity\": 10,\n            \"notes\": \"Cần gấp cho món mới\"\n        }\n    ],\n    \"neededByDate\": \"2025-01-10\",\n    \"priority\": \"high\",\n    \"notes\": \"Yêu cầu nguyên liệu cho thực đơn tuần tới\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/ingredient-request/create",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"ingredient-request",
+						"create"
+					]
+				},
+				"description": "Tạo yêu cầu order nguyên liệu mới"
+			},
+			"response": []
+		},
+		{
+			"name": "5. Get Chef's Requests",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{chef_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/ingredient-request/chef",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"ingredient-request",
+						"chef"
+					]
+				},
+				"description": "Xem tất cả các yêu cầu của chef hiện tại"
+			},
+			"response": []
+		},
+		{
+			"name": "6. Update Request",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "token",
+						"value": "{{chef_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [\n        {\n            \"ingredientId\": \"INGREDIENT_ID_HERE\",\n            \"quantity\": 15,\n            \"notes\": \"Đã cập nhật số lượng\"\n        }\n    ],\n    \"neededByDate\": \"2025-01-12\",\n    \"priority\": \"medium\",\n    \"notes\": \"Yêu cầu đã được cập nhật\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/ingredient-request/update/REQUEST_ID_HERE",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"ingredient-request",
+						"update",
+						"REQUEST_ID_HERE"
+					]
+				},
+				"description": "Cập nhật yêu cầu nguyên liệu"
+			},
+			"response": []
+		},
+		{
+			"name": "7. Cancel Request",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{chef_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/ingredient-request/cancel/REQUEST_ID_HERE",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"ingredient-request",
+						"cancel",
+						"REQUEST_ID_HERE"
+					]
+				},
+				"description": "Hủy yêu cầu nguyên liệu"
+			},
+			"response": []
+		}
+	]
+}
