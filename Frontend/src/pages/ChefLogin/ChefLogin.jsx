@@ -11,6 +11,7 @@ const ChefLogin = ({ setToken, setUserRole, setUserName }) => {
     password: "",
     restaurant: ""
   })
+  const [isLoading, setIsLoading] = useState(false)
 
   const onChangeHandler = (event) => {
     const name = event.target.name
@@ -20,6 +21,11 @@ const ChefLogin = ({ setToken, setUserRole, setUserName }) => {
 
   const onLogin = async (event) => {
     event.preventDefault()
+    
+    // Ngăn việc submit liên tục
+    if (isLoading) return
+    
+    setIsLoading(true)
     let apiUrl
     
     if (currState === "Login") {
@@ -43,15 +49,34 @@ const ChefLogin = ({ setToken, setUserRole, setUserName }) => {
           localStorage.setItem("chef_role", response.data.role)
           localStorage.setItem("chef_name", response.data.name)
           localStorage.setItem("chef_restaurant", response.data.restaurant || "Chưa cập nhật")
+          
+          // Hiển thị thông báo thành công
+          if (currState === "Sign Up") {
+            alert("Đăng ký thành công! Chào mừng bạn đến với hệ thống.")
+          }
         } else {
           alert("Chỉ có đầu bếp mới có thể truy cập hệ thống này!")
         }
       } else {
-        alert(response.data.message)
+        alert(response.data.message || "Có lỗi xảy ra. Vui lòng thử lại!")
       }
     } catch (error) {
-      alert("Đã xảy ra lỗi. Vui lòng thử lại!")
-      console.error(error)
+      console.error("Login/Register error:", error)
+      
+      // Xử lý các loại lỗi khác nhau
+      if (error.response) {
+        // Server trả về lỗi
+        const errorMessage = error.response.data?.message || "Lỗi từ máy chủ. Vui lòng thử lại!"
+        alert(errorMessage)
+      } else if (error.request) {
+        // Không có phản hồi từ server
+        alert("Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng!")
+      } else {
+        // Lỗi khác
+        alert("Đã xảy ra lỗi. Vui lòng thử lại!")
+      }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -101,7 +126,20 @@ const ChefLogin = ({ setToken, setUserRole, setUserName }) => {
           />
         </div>
         
-        <button type="submit">{currState === "Sign Up" ? "Tạo tài khoản" : "Đăng nhập"}</button>
+        <button 
+          type="submit" 
+          disabled={isLoading}
+          className={isLoading ? "loading" : ""}
+        >
+          {isLoading ? (
+            <>
+              <span className="spinner"></span>
+              {currState === "Sign Up" ? "Đang tạo tài khoản..." : "Đang đăng nhập..."}
+            </>
+          ) : (
+            currState === "Sign Up" ? "Tạo tài khoản" : "Đăng nhập"
+          )}
+        </button>
         
         <div className="chef-login-popup-condition">
           <input type="checkbox" required />
@@ -109,8 +147,14 @@ const ChefLogin = ({ setToken, setUserRole, setUserName }) => {
         </div>
         
         {currState === "Login" 
-          ? <p>Tạo tài khoản mới? <span onClick={() => setCurrState("Sign Up")}>Đăng ký tại đây</span></p>
-          : <p>Đã có tài khoản? <span onClick={() => setCurrState("Login")}>Đăng nhập tại đây</span></p>
+          ? <p>Tạo tài khoản mới? <span 
+              onClick={() => !isLoading && setCurrState("Sign Up")}
+              style={{ opacity: isLoading ? 0.5 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}
+            >Đăng ký tại đây</span></p>
+          : <p>Đã có tài khoản? <span 
+              onClick={() => !isLoading && setCurrState("Login")}
+              style={{ opacity: isLoading ? 0.5 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}
+            >Đăng nhập tại đây</span></p>
         }
       </form>
     </div>
