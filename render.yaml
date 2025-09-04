@@ -1,0 +1,60 @@
+services:
+  # Backend API Service
+  - type: web
+    name: fastship-order-nl-backend
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: cd Backend && npm install
+    startCommand: cd Backend && node server.js
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 4000
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false  # Set này trong Render dashboard
+      - key: JWT_SECRET
+        sync: false  # Set này trong Render dashboard
+      - key: ADMIN_EMAIL
+        value: admin@fastship.com
+      - key: ADMIN_PASSWORD
+        sync: false  # Set này trong Render dashboard
+
+  # Frontend - Chef App (Static Site)
+  - type: web
+    name: fastship-order-nl-chef
+    env: static
+    region: singapore
+    plan: free
+    buildCommand: cd Frontend && npm install && npm run build
+    staticPublishPath: Frontend/dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: fastship-order-nl-backend
+          envVarKey: RENDER_EXTERNAL_URL
+
+  # Admin Panel (Static Site)  
+  - type: web
+    name: fastship-order-nl-admin
+    env: static
+    region: singapore
+    plan: free
+    buildCommand: cd Admin && npm install && npm run build
+    staticPublishPath: Admin/dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: fastship-order-nl-backend
+          envVarKey: RENDER_EXTERNAL_URL
+
+databases:
+  # Sử dụng MongoDB Atlas thay vì database local
+  # Cấu hình MONGODB_URI trong environment variables
+
