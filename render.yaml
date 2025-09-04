@@ -3,10 +3,10 @@ services:
   - type: web
     name: food-delivery-backend
     env: node
-    runtime: node18
+    nodeVersion: 22.x
     plan: free
     rootDir: Backend
-    buildCommand: npm install
+    buildCommand: npm ci
     startCommand: npm start
     healthCheckPath: /health
     envVars:
@@ -17,9 +17,10 @@ services:
   - type: web
     name: food-delivery-frontend
     env: static
+    nodeVersion: 22.x
     plan: free
     rootDir: Frontend
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
     routes:
       - type: rewrite
@@ -27,15 +28,16 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://backend-ordernl.onrender.com
+        value: https://fastship-order-nl-zkxw.onrender.com
 
   # Admin service  
   - type: web
     name: food-delivery-admin
     env: static
+    nodeVersion: 22.x
     plan: free
     rootDir: Admin
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
     routes:
       - type: rewrite
@@ -43,4 +45,4 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://backend-ordernl.onrender.com
+        value: https://fastship-order-nl-zkxw.onrender.com

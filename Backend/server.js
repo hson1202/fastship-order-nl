@@ -11,6 +11,12 @@ import ingredientRequestRouter from "./routes/ingredientRequestRoute.js"
 import "dotenv/config.js"
 
 //app config
+console.log("Starting FASTSHIP ORDER NL Backend...");
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("PORT:", process.env.PORT);
+console.log("MONGODB_URI exists:", !!process.env.MONGODB_URI);
+console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
+
 const app=express()
 const port = process.env.PORT || 4000
 
@@ -19,10 +25,16 @@ app.use(express.json())
 app.use(cors())
 
 //db connection
-connectDB().catch(err => {
-    console.error("Database connection failed:", err);
-    process.exit(1);
-});
+console.log("Attempting to connect to database...");
+connectDB()
+    .then(() => {
+        console.log("Database connected successfully!");
+    })
+    .catch(err => {
+        console.error("Database connection failed:", err);
+        // Don't exit immediately, let server run without DB for testing
+        console.log("Continuing without database connection...");
+    });
 
 //api endpoints
 app.use("/api/food",foodRouter)
@@ -42,10 +54,14 @@ app.get("/health",(req,res)=>{
     res.status(200).json({status: "OK", message: "Server is healthy"})
 })
 
+console.log("Setting up routes...");
+
+console.log("Starting server...");
 app.listen(port,()=>{
-    console.log(`Server started on http://localhost:${port}`)
+    console.log(`✅ Server started successfully on port ${port}`);
+    console.log(`Health check: http://localhost:${port}/health`);
 }).on('error', (err) => {
-    console.error("Server failed to start:", err);
+    console.error("❌ Server failed to start:", err);
     process.exit(1);
 });
 
