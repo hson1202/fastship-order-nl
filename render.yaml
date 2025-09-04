@@ -6,7 +6,7 @@ services:
     nodeVersion: 22.x
     plan: free
     rootDir: Backend
-    buildCommand: npm ci
+    buildCommand: rm -rf node_modules package-lock.json && npm install
     startCommand: npm start
     healthCheckPath: /health
     envVars:
@@ -20,7 +20,7 @@ services:
     nodeVersion: 22.x
     plan: free
     rootDir: Frontend
-    buildCommand: npm ci && npm run build
+    buildCommand: rm -rf node_modules package-lock.json && npm install --legacy-peer-deps && npm run build
     staticPublishPath: ./dist
     routes:
       - type: rewrite
@@ -37,7 +37,7 @@ services:
     nodeVersion: 22.x
     plan: free
     rootDir: Admin
-    buildCommand: npm ci && npm run build
+    buildCommand: rm -rf node_modules package-lock.json && npm install --legacy-peer-deps && npm run build
     staticPublishPath: ./dist
     routes:
       - type: rewrite
