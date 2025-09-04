@@ -3,6 +3,7 @@ services:
   - type: web
     name: food-delivery-backend
     env: node
+    plan: free
     rootDir: Backend
     buildCommand: npm install
     startCommand: npm start
@@ -15,6 +16,7 @@ services:
   - type: web
     name: food-delivery-frontend
     env: static
+    plan: free
     rootDir: Frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
@@ -27,6 +29,7 @@ services:
   - type: web
     name: food-delivery-admin
     env: static
+    plan: free
     rootDir: Admin
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist

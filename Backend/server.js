@@ -35,6 +35,10 @@ app.get("/",(req,res)=>{
     res.send("API Working")
 })
 
+app.get("/health",(req,res)=>{
+    res.status(200).json({status: "OK", message: "Server is healthy"})
+})
+
 app.listen(port,()=>{
     console.log(`Server started on http://localhost:${port}`)
 })
