@@ -3,7 +3,6 @@ services:
   - type: web
     name: food-delivery-backend
     env: node
-    region: frankfurt
     rootDir: Backend
     buildCommand: npm install
     startCommand: npm start
@@ -16,7 +15,6 @@ services:
   - type: web
     name: food-delivery-frontend
     env: static
-    region: frankfurt
     rootDir: Frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
@@ -29,7 +27,6 @@ services:
   - type: web
     name: food-delivery-admin
     env: static
-    region: frankfurt
     rootDir: Admin
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
