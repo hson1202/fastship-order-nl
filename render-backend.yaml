@@ -1,0 +1,13 @@
+services:
+  # Backend service only
+  - type: web
+    name: food-delivery-backend
+    env: node
+    plan: free
+    rootDir: Backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production

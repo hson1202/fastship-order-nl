@@ -1,0 +1,13 @@
+services:
+  # Frontend service only
+  - type: web
+    name: food-delivery-frontend
+    env: static
+    plan: free
+    rootDir: Frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
