@@ -3,6 +3,7 @@ services:
   - type: web
     name: food-delivery-backend
     env: node
+    runtime: node18
     plan: free
     rootDir: Backend
     buildCommand: npm install
@@ -11,5 +12,3 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000

@@ -19,7 +19,10 @@ app.use(express.json())
 app.use(cors())
 
 //db connection
-connectDB();
+connectDB().catch(err => {
+    console.error("Database connection failed:", err);
+    process.exit(1);
+});
 
 //api endpoints
 app.use("/api/food",foodRouter)
@@ -41,7 +44,10 @@ app.get("/health",(req,res)=>{
 
 app.listen(port,()=>{
     console.log(`Server started on http://localhost:${port}`)
-})
+}).on('error', (err) => {
+    console.error("Server failed to start:", err);
+    process.exit(1);
+});
 
 //mongodb+srv://greatstack:186312@cluster0.ovanjzw.mongodb.net/?
 //retryWrites=true&w=majority&appName=Cluster0
